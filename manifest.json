@@ -1,0 +1,17 @@
+{
+  "name": "静息岛 · 正念小站",
+  "short_name": "静息岛",
+  "description": "给初中生的正念小站：音乐盒、脑力训练、情商练习、正念音乐。玩着玩着，把专注力和好情绪练回来。",
+  "lang": "zh-CN",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f6f5f1",
+  "theme_color": "#6d9887",
+  "icons": [
+    { "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

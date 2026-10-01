@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="format-detection" content="telephone=no">
+<meta name="theme-color" content="#6d9887">
+<meta name="description" content="静息岛 —— 给初中生的正念小站。音乐盒、脑力训练、情商练习、正念音乐，玩着玩着就把专注力练回来了。">
+<!-- PWA：添加到桌面后全屏运行、无地址栏、断网也能玩 -->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="静息岛">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="assets/icons/icon-192.png">
+<link rel="apple-touch-icon" href="assets/icons/icon-180.png">
+<title>静息岛 · 正念小站</title>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="theme-light">
+
+<!-- ============ 启动遮罩：微信要求音频必须由用户手势触发 ============ -->
+<div id="splash" class="splash">
+  <div class="splash-inner">
+    <div class="splash-ring"></div>
+    <h1 class="splash-title">静息岛</h1>
+    <p class="splash-sub">先深呼吸一次，再进来</p>
+    <button id="btnEnter" class="btn-primary big">轻触开始</button>
+    <p class="splash-tip">建议戴上耳机 · 音量调至舒适</p>
+  </div>
+</div>
+
+<!-- ============ 顶部栏 ============ -->
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-dot"></span>
+    <span class="brand-name">静息岛</span>
+  </div>
+  <div class="topbar-right">
+    <div class="energy" id="energyChip" title="专注能量">
+      <span class="energy-icon">✦</span><span id="energyVal">0</span>
+    </div>
+    <button class="icon-btn" id="btnTheme" title="切换日间/夜间">☾</button>
+  </div>
+</header>
+
+<!-- ============ 主容器 ============ -->
+<main id="app">
+
+  <!-- ---------- 首页 ---------- -->
+  <section class="page" data-page="home">
+    <div class="hero card">
+      <div class="hero-text">
+        <h2 id="greet">今天，慢一点</h2>
+        <p id="greetSub">不是让你戒掉游戏，是让你重新拿回「选择权」。</p>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><b id="statStreak">0</b><span>连续天数</span></div>
+        <div class="stat"><b id="statMin">0</b><span>累计分钟</span></div>
+        <div class="stat"><b id="statSwap">0</b><span>抢回小时</span></div>
+      </div>
+    </div>
+
+    <div class="card press-card">
+      <b class="press-title">现在哪儿堵？</b>
+      <p class="press-sub">不是懒，是电量真的见底了。点一个，它给你一件现在就能做的事。</p>
+      <div id="pressRow" class="press-row"></div>
+      <div id="pressTip" class="press-tip"></div>
+      <div id="pressAct" class="press-act"></div>
+    </div>
+
+    <div id="offlineBar" class="offline-bar">
+      <span class="dot"></span><span id="offlineTxt">已开启离线模式 · 断网也能玩</span>
+    </div>
+
+    <div class="quick-row">
+      <button class="quick" data-game="breathe"><span class="q-ico">🫧</span><span>呼吸一下</span></button>
+      <button class="quick" data-go="sounds"><span class="q-ico">🎧</span><span>正念音乐</span></button>
+      <button class="quick" data-go="musicbox"><span class="q-ico">🎵</span><span>八音盒</span></button>
+    </div>
+
+    <h3 class="sec-title">今日推荐练习</h3>
+    <div id="dailyTask" class="card task-card">
+      <div class="task-left">
+        <span class="task-ico">🌱</span>
+        <div>
+          <b id="dailyName">3 分钟呼吸空间</b>
+          <p id="dailyDesc">先把心放回身体里</p>
+        </div>
+      </div>
+      <button class="btn-primary" id="btnDaily">开始</button>
+    </div>
+
+    <h3 class="sec-title">训练营地</h3>
+    <div class="grid2">
+      <button class="tile" data-go="brain">
+        <span class="tile-ico">🧠</span>
+        <b>脑力训练</b>
+        <small>记忆 · 专注 · 刹车力</small>
+      </button>
+      <button class="tile" data-go="eq">
+        <span class="tile-ico">💗</span>
+        <b>情商小屋</b>
+        <small>读懂情绪 · 好好说话</small>
+      </button>
+      <button class="tile" data-go="musicbox">
+        <span class="tile-ico">🎼</span>
+        <b>音乐盒</b>
+        <small>五声音阶 · 怎么弹都好听</small>
+      </button>
+      <button class="tile" data-go="sounds">
+        <span class="tile-ico">🌊</span>
+        <b>声音空间</b>
+        <small>雨声 · 颂钵 · 海浪</small>
+      </button>
+      <button class="tile" data-chat="1">
+        <span class="tile-ico">🌳</span>
+        <b>树洞聊聊</b>
+        <small>有话不方便说，说给它</small>
+      </button>
+      <button class="tile" data-go="eq" data-scroll="wall">
+        <span class="tile-ico">🫧</span>
+        <b>共鸣墙</b>
+        <small>原来不止我一个人这样</small>
+      </button>
+    </div>
+
+    <h3 class="sec-title">记录一笔（可选）</h3>
+    <div class="card swap-card">
+      <p class="muted">今天本来想打游戏，但先做了点别的？记一笔，看看你抢回多少时间。</p>
+      <div class="swap-row">
+        <input type="number" id="swapInput" min="0" max="600" step="5" placeholder="分钟" inputmode="numeric">
+        <button class="btn-primary" id="btnSwap">记一笔</button>
+      </div>
+      <p id="swapMsg" class="swap-msg"></p>
+    </div>
+
+    <div class="footnote">练习记录默认存在你自己的手机里。<br>在微信里点右上角「···」→ <b>添加到桌面</b>：以后一秒打开、全屏运行、<b>没有网也能玩</b>。</div>
+  </section>
+
+  <!-- ---------- 音乐盒 ---------- -->
+  <section class="page" id="musicbox" data-page="musicbox" hidden>
+    <h3 class="sec-title">八音盒</h3>
+    <div class="card">
+      <p class="muted">五声音阶（宫商角徵羽）—— 五个音里随便按，都不会难听。这就是它的设计目的：让你敢弹。</p>
+      <div class="mb-modes">
+        <button class="chip active" data-mb="free">自由弹</button>
+        <button class="chip" data-mb="seed">种子旋律</button>
+        <button class="chip" data-mb="drift">自动漂流</button>
+      </div>
+      <div id="mbKeys" class="mb-keys"></div>
+      <div class="mb-bar">
+        <button class="btn-ghost" id="mbDemo">听一遍</button>
+        <button class="btn-ghost" id="mbClear">清空</button>
+        <span class="mb-hint" id="mbHint">点亮音符，弹出你的旋律</span>
+      </div>
+      <div id="mbMelody" class="mb-melody"></div>
+    </div>
+    <div class="card">
+      <h4>解锁的音色</h4>
+      <div id="mbTimbres" class="chip-row"></div>
+      <p class="muted">用专注能量解锁更多音色。能量从练习里来，不是充值来的。</p>
+    </div>
+  </section>
+
+  <!-- ---------- 脑力训练 ---------- -->
+  <section class="page" data-page="brain" hidden>
+    <h3 class="sec-title">脑力训练</h3>
+    <p class="muted sec-desc">每个 2–3 分钟。练的不是分数，是「我能按下暂停键」这件事本身。</p>
+
+    <div class="game-card" data-game="gng">
+      <div class="gc-ico">🛑</div>
+      <div class="gc-body">
+        <b>冲动刹车 <span class="tag">Go/No-Go</span></b>
+        <p>绿灯要按，红灯要忍住。练的是抑制控制 —— 游戏停不下来，问题往往出在这。</p>
+        <div class="gc-best">最佳：<span data-best="gng">—</span></div>
+      </div>
+      <button class="btn-primary">玩</button>
+    </div>
+
+    <div class="game-card" data-game="mindbug">
+      <div class="gc-ico">🎯</div>
+      <div class="gc-body">
+        <b>念头拆弹 <span class="tag">认知解离</span></b>
+        <p>「我完蛋了」是事实还是脑补？脑补冒出来拍掉它，事实要忍住不动。练的是把想法和事实分开。</p>
+        <div class="gc-best">最佳：<span data-best="mindbug">—</span></div>
+      </div>
+      <button class="btn-primary">玩</button>
+    </div>
+
+    <div class="game-card" data-game="stroop">
+      <div class="gc-ico">🎨</div>
+      <div class="gc-body">
+        <b>色词干扰 <span class="tag">Stroop</span></b>
+        <p>字说「红」，颜色却是蓝。只认颜色，不认字。练的是抗干扰。</p>
+        <div class="gc-best">最佳：<span data-best="stroop">—</span></div>
+      </div>
+      <button class="btn-primary">玩</button>
+    </div>
+
+    <div class="game-card" data-game="echo">
+      <div class="gc-ico">🔔</div>
+      <div class="gc-body">
+        <b>序列回声 <span class="tag">工作记忆</span></b>
+        <p>听一串音，再复述出来。广度一点点涨，就是工作记忆在长。</p>
+        <div class="gc-best">最佳：<span data-best="echo">—</span></div>
+      </div>
+      <button class="btn-primary">玩</button>
+    </div>
+
+    <div class="game-card" data-game="nback">
+      <div class="gc-ico">🔢</div>
+      <div class="gc-body">
+        <b>回到上一个 <span class="tag">N-Back</span></b>
+        <p>这个音，和上一个一样吗？经典工作记忆范式，研究中常用它测训练效果。</p>
+        <div class="gc-best">最佳：<span data-best="nback">—</span></div>
+      </div>
+      <button class="btn-primary">玩</button>
+    </div>
+
+    <div class="game-card" data-game="balloon">
+      <div class="gc-ico">🎈</div>
+      <div class="gc-body">
+        <b>气球不爆 <span class="tag">知止</span></b>
+        <p>每打一次气多一分，但随时会爆。难的不是不爆，是明明还能多拿却主动收手 —— 「再玩一把就睡」练的就是这个。</p>
+        <div class="gc-best">最高分：<span data-best="balloon">—</span></div>
+      </div>
+      <button class="btn-primary">玩</button>
+    </div>
+
+    <div class="card note">
+      <p><b>怎么练才有用：</b>每天挑 1–2 个，各做 2–3 分钟，坚持 ≥4 周。研究里的干预大多是这个量级，零散玩一次不会有变化。</p>
+    </div>
+  </section>
+
+  <!-- ---------- 情商小屋 ---------- -->
+  <section class="page" data-page="eq" hidden>
+    <h3 class="sec-title">情商小屋</h3>
+    <p class="muted sec-desc">情绪不是麻烦，是信号。能叫出名字的情绪，就不那么吓人了。</p>
+
+    <div class="game-card" data-game="emotion">
+      <div class="gc-ico">🎭</div>
+      <div class="gc-body">
+        <b>情绪命名器</b>
+        <p>给模糊的感觉找一个准确的词。研究显示，精确命名情绪本身就能降低它的强度。</p>
+        <div class="gc-best">最佳：<span data-best="emotion">—</span></div>
+      </div>
+      <button class="btn-primary">玩</button>
+    </div>
+
+    <div class="game-card" data-game="perspective">
+      <div class="gc-ico">👀</div>
+      <div class="gc-body">
+        <b>换双眼睛看</b>
+        <p>同一个场景，别人心里在想什么？练的是观点采择 —— 人际冲突的解药。</p>
+        <div class="gc-best">最佳：<span data-best="perspective">—</span></div>
+      </div>
+      <button class="btn-primary">玩</button>
+    </div>
+
+    <div class="game-card" data-game="urge">
+      <div class="gc-ico">🌊</div>
+      <div class="gc-body">
+        <b>冲动冲浪 <span class="tag">渴求耐受</span></b>
+        <p>想打游戏的念头像浪，会涨也会退。练的是：看着它，不跟着它走。</p>
+        <div class="gc-best">已练习：<span data-best="urge">—</span></div>
+      </div>
+      <button class="btn-primary">玩</button>
+    </div>
+
+    <div class="game-card" data-game="reframe">
+      <div class="gc-ico">🔧</div>
+      <div class="gc-body">
+        <b>换个说法 <span class="tag">认知重评</span></b>
+        <p>同一件事，换一句对自己说的话，后面就完全不一样。注意：「我不在乎」不算 —— 那是憋回去，不是想通了。</p>
+        <div class="gc-best">最佳：<span data-best="reframe">—</span></div>
+      </div>
+      <button class="btn-primary">玩</button>
+    </div>
+
+    <div class="game-card" data-game="sensory">
+      <div class="gc-ico">🧭</div>
+      <div class="gc-body">
+        <b>感官雷达 <span class="tag">5-4-3-2-1</span></b>
+        <p>慌到脑子打转时的急救：找到 5 样看见的、4 样摸到的、3 样听到的…… 把人从想象拽回眼前。</p>
+        <div class="gc-best">已练习：<span data-count="sensory">—</span></div>
+      </div>
+      <button class="btn-primary">玩</button>
+    </div>
+
+    <div class="game-card" data-game="shredder">
+      <div class="gc-ico">✂️</div>
+      <div class="gc-body">
+        <b>烦恼碎纸机</b>
+        <p>把卡在心里的那句话写下来，看它被绞成纸屑。它不会消失，但它会从「一直在转的念头」变成「地上的一堆纸」。</p>
+        <div class="gc-best">已绞碎：<span data-count="shred">—</span></div>
+      </div>
+      <button class="btn-primary">玩</button>
+    </div>
+
+    <div class="game-card" data-game="doodle">
+      <div class="gc-ico">🖍</div>
+      <div class="gc-body">
+        <b>心情调色盘</b>
+        <p>说不出来的东西，画得出来。乱涂也行，画完给它起个名字 —— 叫得出名字，它就没那么吓人了。</p>
+        <div class="gc-best">已画：<span data-count="doodle">—</span></div>
+      </div>
+      <button class="btn-primary">玩</button>
+    </div>
+
+    <h3 class="sec-title">心情日记</h3>
+    <div class="card">
+      <div id="moodRow" class="mood-row"></div>
+      <textarea id="moodText" maxlength="140" placeholder="一句就好。今天心里最响的那个声音是什么？"></textarea>
+      <div class="row-end"><button class="btn-primary" id="btnMood">存下来</button></div>
+      <div id="moodList" class="mood-list"></div>
+    </div>
+
+    <h3 class="sec-title" id="wall">共鸣墙</h3>
+    <div class="card">
+      <p class="muted">来自其他同学的一句话。匿名的，不带名字 —— 你会发现，大家卡住的地方都差不多。</p>
+      <div id="echoList" class="echo-list"><p class="muted">正在读取…</p></div>
+      <div class="swap-row" style="margin-top:12px">
+        <input type="text" id="echoInput" maxlength="60" placeholder="也写一句（最多 60 字）">
+        <button class="btn-primary" id="btnEcho">发出去</button>
+      </div>
+      <p id="echoMsg" class="swap-msg"></p>
+    </div>
+  </section>
+
+  <!-- ---------- 声音空间 ---------- -->
+  <section class="page" data-page="sounds" hidden>
+    <h3 class="sec-title">声音空间</h3>
+    <p class="muted sec-desc">全部由代码实时合成，不联网、不耗流量，也不会突然跳出广告。</p>
+    <div id="soundGrid" class="grid2"></div>
+
+    <div class="card player-card">
+      <div class="player-head">
+        <b id="plName">未播放</b>
+        <span id="plTimer" class="muted">00:00</span>
+      </div>
+      <input type="range" id="plVol" min="0" max="100" value="60">
+      <div class="mb-bar">
+        <button class="btn-ghost" id="plStop">停止</button>
+        <select id="plMinutes" class="mini-select">
+          <option value="0">不限时</option>
+          <option value="5">5 分钟</option>
+          <option value="10">10 分钟</option>
+          <option value="20" selected>20 分钟</option>
+          <option value="30">30 分钟</option>
+        </select>
+      </div>
+    </div>
+
+    <h3 class="sec-title">引导式练习</h3>
+    <div id="guideList" class="list-card"></div>
+  </section>
+
+  <!-- ---------- 我的 ---------- -->
+  <section class="page" data-page="me" hidden>
+    <h3 class="sec-title">我的</h3>
+
+    <div class="card account-card">
+      <div id="acctGuest">
+        <b>还没登录</b>
+        <p class="muted">不登录也能正常用。登录之后，进度和日记会存到云端 —— 换手机、清缓存都不会丢。</p>
+        <button class="btn-primary" id="btnLogin" style="margin-top:10px">登录 / 注册</button>
+      </div>
+      <div id="acctUser" hidden>
+        <b id="acctEmail">—</b>
+        <p class="muted" id="acctSync">云同步已开启</p>
+        <button class="btn-ghost" id="btnLogout" style="margin-top:10px">退出登录</button>
+      </div>
+    </div>
+
+    <div class="card stats-card">
+      <div class="big-stat"><b id="meEnergy">0</b><span>专注能量</span></div>
+      <div class="stat-grid">
+        <div><b id="meStreak">0</b><span>连续天数</span></div>
+        <div><b id="meMin">0</b><span>累计分钟</span></div>
+        <div><b id="meSwap">0</b><span>抢回小时</span></div>
+        <div><b id="meDays">0</b><span>练习次数</span></div>
+      </div>
+    </div>
+
+    <h3 class="sec-title">成长</h3>
+    <div id="badgeList" class="grid2"></div>
+
+    <div id="artSection" hidden>
+      <h3 class="sec-title">心情画廊</h3>
+      <div id="artGrid" class="art-grid"></div>
+    </div>
+
+    <h3 class="sec-title">最近的练习（云端）</h3>
+    <div class="card">
+      <div id="logList" class="log-list"><p class="muted">登录后可见。</p></div>
+    </div>
+
+    <div class="card">
+      <div class="row-between">
+        <b>数据管理</b>
+        <button class="btn-ghost danger" id="btnReset">清空全部记录</button>
+      </div>
+      <p class="muted">记录保存在本设备浏览器内，清理微信缓存或使用无痕模式会丢失。</p>
+    </div>
+  </section>
+</main>
+
+<!-- ============ 底部导航 ============ -->
+<nav class="tabbar">
+  <button class="tab active" data-go="home"><span>🏝</span>首页</button>
+  <button class="tab" data-go="musicbox"><span>🎵</span>音乐盒</button>
+  <button class="tab" data-go="brain"><span>🧠</span>脑力</button>
+  <button class="tab" data-go="eq"><span>💗</span>情商</button>
+  <button class="tab" data-go="sounds"><span>🌊</span>声音</button>
+  <button class="tab" data-go="me"><span>🌿</span>我的</button>
+</nav>
+
+<!-- ============ 全屏游戏 / 练习容器 ============ -->
+<div id="overlay" class="overlay" hidden>
+  <div class="ov-head">
+    <button class="icon-btn" id="ovBack">←</button>
+    <b id="ovTitle">练习</b>
+    <span class="ov-spacer"></span>
+  </div>
+  <div id="ovBody" class="ov-body"></div>
+</div>
+
+<div id="toast" class="toast" hidden></div>
+
+<script src="assets/js/vendor/workbuddy-cloud-sdk.global.js"></script>
+<script src="assets/js/audio.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/games.js"></script>
+<script src="assets/js/cloud.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>
